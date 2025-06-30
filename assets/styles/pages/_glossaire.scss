@@ -1,0 +1,97 @@
+@use '../abstracts/variables' as v;
+#glossaire {
+  main {
+    section {
+      padding: 2rem;
+      list-style: none;
+
+      h2, h3 {
+        text-align: center;
+        margin-bottom: 1rem;
+        color: v.$color-black;
+      }
+
+      .cards {
+        display: flex;
+        gap: 1rem;
+        justify-content: space-between;
+        padding: 0;
+        margin-top: 2rem;
+
+        li {
+          flex: 1 1 30%;
+          background-color: v.$color-white;
+          border-radius: 10px;
+          padding: 1rem;
+          box-shadow: 0 4px 10px rgba(0,0,0,0.1);
+          color: #333;
+
+          strong {
+            font-size: 1.1rem;
+            display: block;
+            margin-bottom: 0.5rem;
+          }
+
+          &:nth-child(3n+1) {
+            border-top: 5px solid v.$color-blue;
+          }
+
+          &:nth-child(3n+2) {
+            border-top: 5px solid v.$color-white;
+          }
+
+          &:nth-child(3n+3) {
+            border-top: 5px solid v.$color-red;
+          }
+
+          &:hover {
+            transform: translateY(-5px);
+            box-shadow: 0 6px 15px rgba(0,0,0,0.15);
+          }
+        }
+      }
+    }
+  }
+@media screen and (max-width: 550px) {
+    .cards{
+        flex-direction: column;
+        gap: 0;
+        li{
+            margin: 0;
+            padding: 0;
+            
+          &:nth-child(3n+1) {
+            border-left: 5px solid v.$color-blue;
+            border-right: 5px solid v.$color-red;
+            border-top: white !important;
+          }
+
+          &:nth-child(3n+2) {
+            border-left: 5px solid v.$color-blue;
+            border-right: 5px solid v.$color-red;
+            border-top: white;
+          }
+
+          &:nth-child(3n+3) {
+            border-left: 5px solid v.$color-blue;
+            border-right: 5px solid v.$color-red;
+            border-top: white !important;
+          }
+        }
+    }
+}
+  p {
+    text-align: justify;
+    margin: 1rem 0;
+    line-height: 1.6;
+    color: v.$color-black;
+  }
+
+  a {
+    color: v.$color-blue;
+    text-decoration: none;
+    &:hover {
+      text-decoration: underline;
+    }
+  }
+}
