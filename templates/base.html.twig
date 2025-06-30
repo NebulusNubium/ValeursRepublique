@@ -16,24 +16,31 @@
         {% block header %}
             <nav>
                 <ul class="navbar-main">
-                    <li><a href="{{ path('app_home') }}" class="listes">Accueil</a></li>
-                    <li><a href="{{ path('glossaire') }}" class="listes">Glossaire</a></li>
+                    <li><a href="{{ path('app_home') }}">Accueil</a></li>
+                    <li><a href="{{ path('glossaire') }}">Glossaire</a></li>
                     {% if app.user %}
                         <li><a href="{{ path('app_jeu') }}">Jouer</a></li>
+                        {% if is_granted('ROLE_ADMIN') %}
+                            <li><a href="{{ path('admin') }}">Admin</a></li>
+                        {% endif %}
                         <li class="logout-item">
                             <form action="{{ path('app_logout') }}" method="post">
                                 <button type="submit">✖️ Déconnexion</button>
                             </form>
                         </li>
-                        {% if is_granted('ROLE_ADMIN') %}
-                            <li><a href="{{ path('admin') }}">Admin</a></li>
-                        {% endif %}
                     {% else %}
                         <li><a href="{{ path('app_register') }}">Inscription</a></li>
                         <li><a href="{{ path('app_login') }}">Connexion</a></li>
                     {% endif %}
                 </ul>
+
+                <div class="logo">
+                    <a href="{{ path('app_home') }}">
+                        <img src="{{ asset('img/logo.png') }}" alt="Logo République">
+                    </a>
+                </div>
             </nav>
+
         {% endblock %}
         {% block main %}{% endblock %}
     </body>

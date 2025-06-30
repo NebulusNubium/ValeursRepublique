@@ -7,6 +7,19 @@
  */
 import './styles/app.scss';
 
+document.addEventListener('click', function(event) {
+    if (!event.target.closest('button')) {
+        const audio = new Audio('assets/sounds/quack_5.mp3');
+        audio.play().catch(function(error) {
+            console.error('Erreur de lecture audio :', error);
+        });
+
+    }
+    else {
+        console.log(error);
+    }
+});
+
 // QUESTIONS 
 
 const questions = [
@@ -563,9 +576,7 @@ const questions = [
 ];
 
 
-
-console.log('This log comes from assets/app.js - welcome to AssetMapper! 🎉');
-
+// Contenu original de script.js
 const carrousel = document.getElementById("carrousel");
 const pion = document.getElementById("pion");
 const rollBtn = document.getElementById("rollBtn");
@@ -573,6 +584,7 @@ const questionText = document.getElementById("questionText");
 const sourceLink = document.getElementById("sourceLink");
 const choicesDiv = document.getElementById("choices");
 const timerDisplay = document.getElementById("timer");
+const playerNameInput = document.getElementById("playerNameInput");
 
 let position = 0;
 let previousPosition = 0;
@@ -588,186 +600,222 @@ const banquerouteCases = Array.from({ length: questions.length }, (_, i) => i).f
 const totalCases = questions.length;
 
 function formatTime(seconds) {
-  const m = Math.floor(seconds / 60);
-  const s = seconds % 60;
-  return `${m}:${s < 10 ? "0" : ""}${s}`;
+    const m = Math.floor(seconds / 60);
+    const s = seconds % 60;
+    return `${m}:${s < 10 ? "0" : ""}${s}`;
 }
 
 function startTimer() {
-  if (!timerStarted) {
-    startTime = Date.now();
-    timerInterval = setInterval(() => {
-      const elapsed = Math.floor((Date.now() - startTime) / 1000);
-      timerDisplay.innerText = "⏱ " + formatTime(elapsed);
-    }, 1000);
-    timerStarted = true;
-  }
+    if (!timerStarted) {
+        startTime = Date.now();
+        timerInterval = setInterval(() => {
+            const elapsed = Math.floor((Date.now() - startTime) / 1000);
+            timerDisplay.innerText = "⏱ " + formatTime(elapsed);
+        }, 1000);
+        timerStarted = true;
+    }
 }
 
 function addPenaltyTime(seconds) {
-  startTime -= seconds * 1000;
+    startTime -= seconds * 1000;
 }
 
 function stopTimer() {
-  clearInterval(timerInterval);
+    clearInterval(timerInterval);
+    return Math.floor((Date.now() - startTime) / 1000);
 }
 
 function createCases() {
-  for (let i = 0; i < totalCases; i++) {
-    const el = document.createElement("div");
-    el.classList.add("case");
-    if (i === 0) {
-      el.classList.add("debut");
-      el.innerText = "Départ";
-    } else if (i === totalCases - 1) {
-      el.classList.add("fin");
-      el.innerText = "Arrivée";
-    } else if (banquerouteCases.includes(i)) {
-      el.innerText = "💣";
-      el.classList.add("banqueroute");
-    } else if (i === prisonCase) {
-      el.innerText = "⛓ Prison";
-      el.classList.add("prison");
+    for (let i = 0; i < totalCases; i++) {
+        const el = document.createElement("div");
+        el.classList.add("case");
+        if (i === 0) {
+            el.classList.add("debut");
+            el.innerText = "Départ";
+        } else if (i === totalCases - 1) {
+            el.classList.add("fin");
+            el.innerText = "Arrivée";
+        } else if (banquerouteCases.includes(i)) {
+            el.innerText = "💣";
+            el.classList.add("banqueroute");
+        } else if (i === prisonCase) {
+            el.innerText = "⛓ Prison";
+            el.classList.add("prison");
+        }
+        el.dataset.num = i;
+        carrousel.appendChild(el);
     }
-    el.dataset.num = i;
-    carrousel.appendChild(el);
-  }
 }
 
 function scrollToCase(index) {
-  const oneCase = document.querySelector(".case");
-  const caseWidth = oneCase.offsetWidth;
-  const computedStyle = getComputedStyle(carrousel);
-  const gap = parseInt(computedStyle.columnGap || computedStyle.gap || 0); // 
+    const oneCase = document.querySelector(".case");
+    const caseWidth = oneCase.offsetWidth;
+    const computedStyle = getComputedStyle(carrousel);
+    const gap = parseInt(computedStyle.columnGap || computedStyle.gap || 0);
 
-  const totalWidthPerCase = caseWidth + gap;
-  const targetX = totalWidthPerCase * index - (carrousel.parentElement.offsetWidth / 2 - caseWidth / 2);
-  carrousel.style.transform = `translateX(${-targetX}px)`;
+    const totalWidthPerCase = caseWidth + gap;
+    const targetX = totalWidthPerCase * index - (carrousel.parentElement.offsetWidth / 2 - caseWidth / 2);
+    carrousel.style.transform = `translateX(${-targetX}px)`;
 }
 
 function displayQuestion(index) {
-  if (fromBonus) {
-    questionText.innerText = "Vous venez d'atterrir. Relancez le dé.";
-    fromBonus = false;
-    rollBtn.disabled = false;
-    choicesDiv.innerHTML = "";
-    sourceLink.style.display = "none";
-    return;
-  }
-
-  const q = questions[index];
-  if (!q.text) {
-    rollBtn.disabled = false;
-    questionText.innerText = "Cliquez sur lancer pour avancer.";
-    choicesDiv.innerHTML = "";
-    sourceLink.style.display = "none";
-    return;
-  }
-
-  hasAnswered = false;
-  questionText.innerText = q.text;
-  sourceLink.href = q.url;
-  sourceLink.style.display = "none";
-  choicesDiv.innerHTML = "";
-
-  q.choices.forEach((choice, idx) => {
-    const btn = document.createElement("button");
-    btn.innerText = choice;
-    btn.onclick = () => {
-      if (hasAnswered) return;
-      hasAnswered = true;
-      sourceLink.style.display = "inline";
-
-      if (idx === q.correctIndex) {
-        wrongStreak = 0;
-        const bonus = q.level;
-        if (bonus > 0) {
-          questionText.innerText = `🎉 Félicitations, bonus +${bonus}. Vous vous envolé à votre destination !`;
-          pion.style.visibility = "hidden";
-          fromBonus = true;
-          setTimeout(() => {
-            position = Math.min(position + bonus, totalCases - 1);
-            scrollToCase(position);
-            setTimeout(() => {
-              pion.style.visibility = "visible";
-              afterMove();
-            }, 600);
-          }, 500);
-        } else {
-          rollBtn.disabled = false;
-        }
-      } else {
-        wrongStreak++;
-        if (wrongStreak >= 2) {
-          questionText.innerText = "❌ 2 erreurs ! Vous retournez à la case Départ (Prison) et +10 secondes.";
-          addPenaltyTime(10);
-          position = 0;
-          scrollToCase(position);
-          document.querySelector(".debut").innerText = "Prison";
-          wrongStreak = 0;
-        } else {
-          questionText.innerText = "❌ Mauvaise réponse. Retour à la case précédente.";
-          position = previousPosition;
-          scrollToCase(position);
-        }
+    if (fromBonus) {
+        questionText.innerText = "Vous venez d'atterrir. Relancez le dé.";
+        fromBonus = false;
         rollBtn.disabled = false;
-      }
-    };
-    choicesDiv.appendChild(btn);
-  });
+        choicesDiv.innerHTML = "";
+        sourceLink.style.display = "none";
+        return;
+    }
+
+    const q = questions[index];
+    if (!q.text) {
+        rollBtn.disabled = false;
+        questionText.innerText = "Cliquez sur lancer pour avancer.";
+        choicesDiv.innerHTML = "";
+        sourceLink.style.display = "none";
+        return;
+    }
+
+    hasAnswered = false;
+    questionText.innerText = q.text;
+    sourceLink.href = q.url;
+    sourceLink.style.display = "none";
+    choicesDiv.innerHTML = "";
+
+    q.choices.forEach((choice, idx) => {
+        const btn = document.createElement("button");
+        btn.innerText = choice;
+        btn.onclick = () => {
+            if (hasAnswered) return;
+            hasAnswered = true;
+            sourceLink.style.display = "inline";
+
+            if (idx === q.correctIndex) {
+                wrongStreak = 0;
+                const bonus = q.level;
+                if (bonus > 0) {
+                    questionText.innerText = `🎉 Félicitations, bonus +${bonus}. Vous vous envolez à votre destination !`;
+                    pion.style.visibility = "hidden";
+                    fromBonus = true;
+                    setTimeout(() => {
+                        position = Math.min(position + bonus, totalCases - 1);
+                        scrollToCase(position);
+                        setTimeout(() => {
+                            pion.style.visibility = "visible";
+                            afterMove();
+                        }, 600);
+                    }, 500);
+                } else {
+                    rollBtn.disabled = false;
+                }
+            } else {
+                wrongStreak++;
+                if (wrongStreak >= 2) {
+                    questionText.innerText = "❌ 2 erreurs ! Vous retournez à la case Départ (Prison) et +10 secondes.";
+                    addPenaltyTime(10);
+                    position = 0;
+                    scrollToCase(position);
+                    document.querySelector(".debut").innerText = "Prison";
+                    wrongStreak = 0;
+                } else {
+                    questionText.innerText = "❌ Mauvaise réponse. Retour à la case précédente.";
+                    position = previousPosition;
+                    scrollToCase(position);
+                }
+                rollBtn.disabled = false;
+            }
+        };
+        choicesDiv.appendChild(btn);
+    });
+}
+
+function saveScore(timeInSeconds) {
+    const playerName = playerNameInput.value.trim() || 'Anonyme';
+    fetch('/api/save-score', {
+        method: 'POST',
+        headers: {
+            'Content-Type': 'application/json',
+        },
+        body: JSON.stringify({
+            playerName: playerName,
+            timeInSeconds: timeInSeconds,
+        }),
+    })
+    .then(response => response.json())
+    .then(data => {
+        console.log(data.message);
+        updateLeaderboard();
+    })
+    .catch(error => console.error('Erreur lors de l\'enregistrement du score:', error));
+}
+
+function updateLeaderboard() {
+    fetch('/api/top-scores')
+        .then(response => response.json())
+        .then(scores => {
+            const leaderboard = document.getElementById('leaderboard');
+            leaderboard.innerHTML = '<h3>Meilleurs scores</h3><ul>' +
+                (scores.length > 0
+                    ? scores.map(score => `<li>${score.playerName} : ${Math.floor(score.timeInSeconds / 60)}:${score.timeInSeconds % 60 < 10 ? '0' : ''}${score.timeInSeconds % 60}</li>`).join('')
+                    : '<li>Aucun score enregistré pour le moment.</li>') +
+                '</ul>';
+        })
+        .catch(error => console.error('Erreur lors de la récupération des scores:', error));
 }
 
 function afterMove() {
-  if (position === totalCases - 1) {
-    stopTimer();
-    document.getElementById("questionBox").innerHTML = "<h2>🎉 Félicitations, vous avez terminé le jeu !</h2><img src='img/victoire.png' alt='Victoire' style='max-width: 300px; margin-top: 1rem;'>";
-    rollBtn.disabled = true;
-    return;
-  }
+    if (position === totalCases - 1) {
+        const finalTime = stopTimer();
+        document.getElementById("questionBox").innerHTML = `<h2>🎉 Félicitations, vous avez terminé le jeu !</h2><p>Temps final : ${formatTime(finalTime)}</p><img src='${"{{ asset('images/victoire.png') }}"}' alt='Victoire' style='max-width: 300px; margin-top: 1rem;'>`;
+        rollBtn.disabled = true;
+        saveScore(finalTime);
+        return;
+    }
 
-  if (banquerouteCases.includes(position)) {
-    questionText.innerText = "💥 Banqueroute ! Vous retournez à la case précédente.";
-    position = Math.max(position - 1, 0);
-    scrollToCase(position);
-    rollBtn.disabled = false;
-    return;
-  }
+    if (banquerouteCases.includes(position)) {
+        questionText.innerText = "💥 Banqueroute ! Vous retournez à la case précédente.";
+        position = Math.max(position - 1, 0);
+        scrollToCase(position);
+        rollBtn.disabled = false;
+        return;
+    }
 
-  if (position === prisonCase) {
-    questionText.innerText = "⛓ Vous êtes en prison ! Tour bloqué.";
-    setTimeout(() => {
-      rollBtn.disabled = false;
-    }, 2000);
-    return;
-  }
+    if (position === prisonCase) {
+        questionText.innerText = "⛓ Vous êtes en prison ! Tour bloqué.";
+        setTimeout(() => {
+            rollBtn.disabled = false;
+        }, 2000);
+        return;
+    }
 
-  displayQuestion(position);
+    displayQuestion(position);
 }
 
 rollBtn.addEventListener("click", () => {
-  if (!hasAnswered) return;
-  startTimer();
-  previousPosition = position;
-  const lancer = Math.floor(Math.random() * 6) + 1;
-  const target = Math.min(position + lancer, totalCases - 1);
-  rollBtn.disabled = true;
-  questionText.innerText = `🎲 Vous avez lancé un ${lancer} !`;
+    if (!hasAnswered) return;
+    startTimer();
+    previousPosition = position;
+    const lancer = Math.floor(Math.random() * 6) + 1;
+    const target = Math.min(position + lancer, totalCases - 1);
+    rollBtn.disabled = true;
+    questionText.innerText = `🎲 Vous avez lancé un ${lancer} !`;
 
-  let i = position + 1;
-  function step() {
-    if (i > target) {
-      position = target;
-      afterMove();
-      return;
+    let i = position + 1;
+    function step() {
+        if (i > target) {
+            position = target;
+            afterMove();
+            return;
+        }
+        scrollToCase(i);
+        i++;
+        setTimeout(step, 350);
     }
-    scrollToCase(i);
-    i++;
-    setTimeout(step, 350);
-  }
-  step();
+    step();
 });
 
 createCases();
 scrollToCase(0);
-
-
+updateLeaderboard(); // Charger le classement initial
+// QUACK 

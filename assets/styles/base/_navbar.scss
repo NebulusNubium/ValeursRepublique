@@ -3,65 +3,89 @@
 $bleu-republique: #0055a4;
 $blanc-republique: #ffffff;
 $rouge-republique: #ef4135;
-$gris-text: #333;
+$gris-text: #222;
+$hover-color: #0055a4;
 
 nav {
   background: linear-gradient(90deg, $bleu-republique 0%, $blanc-republique 50%, $rouge-republique 100%);
-  padding: 1rem 2rem;
-  box-shadow: 0 4px 10px rgba(0, 0, 0, 0.1);
-}
-
-.navbar-main {
-  list-style: none;
+  padding: 0.5rem 2rem;
   display: flex;
-  justify-content: flex-end;
   align-items: center;
-  margin: 0;
-  padding: 0;
+  justify-content: space-between;
+  flex-wrap: wrap;
+  box-shadow: 0 4px 12px rgba(0, 0, 0, 0.1);
 
-  li {
-    margin-left: 2rem;
-    position: relative;
+  .navbar-main {
+    list-style: none;
+    display: flex;
+    align-items: center;
+    margin: 0;
+    padding: 0;
 
-    a,
-    button {
-      text-decoration: none;
-      color: $gris-text;
-      font-weight: bold;
-      background: transparent;
-      border: none;
-      font-size: 1.1rem;
-      cursor: pointer;
-      transition: all 0.3s ease;
+    li {
+      margin: 0 1rem;
 
-      &:hover {
-        color: $bleu-republique;
-        transform: scale(1.05);
+      a,
+      button {
+        text-decoration: none;
+        color: $gris-text;
+        font-weight: 600;
+        background: transparent;
+        border: none;
+        font-size: 1.1rem;
+        cursor: pointer;
+        transition: color 0.3s ease, transform 0.3s ease;
+
+        &:hover {
+          color: $hover-color;
+          transform: scale(1.05);
+        }
+      }
+
+      form {
+        display: inline;
       }
     }
 
-    form {
-      display: inline;
+    .logout-item button {
+      color: $rouge-republique;
+
+      &:hover {
+        color: darken($rouge-republique, 15%);
+      }
     }
   }
 
-  .logout-item button {
-    color: $rouge-republique;
+  .logo {
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    flex: 1;
 
-    &:hover {
-      color: darken($rouge-republique, 15%);
+    img {
+      max-height: 50px;
+      transition: transform 0.3s ease;
+
+      &:hover {
+        transform: scale(1.1);
+      }
     }
   }
 }
 
-// Ajustement pour le mode mobile
+// Responsive
 @media (max-width: 768px) {
-  .navbar-main {
+  nav {
     flex-direction: column;
-    align-items: flex-start;
+    .navbar-main {
+      flex-direction: column;
+      li {
+        margin: 0.5rem 0;
+      }
+    }
 
-    li {
-      margin: 0.5rem 0;
+    .logo {
+      margin: 1rem 0;
     }
   }
 }
