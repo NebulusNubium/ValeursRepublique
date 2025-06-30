@@ -1,1 +1,117 @@
 @use '../abstracts/variables' as v;
+
+body { 
+  font-family: sans-serif;
+  margin: 0;
+  padding: 0;
+  background: #f7f7f7;
+  text-align: center;
+}
+
+#game {
+  width: 80%;
+  margin: auto;
+}
+
+.header {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  margin: 1rem 0;
+}
+
+#timer {
+  font-weight: bold;
+}
+
+.board-container {
+  position: relative;
+  width: 100%;
+  height: 120px;
+  margin: 1rem 0;
+  overflow: hidden;
+}
+
+.carrousel-wrapper {
+  overflow: hidden;
+  width: 100%;
+}
+
+.carrousel {
+  display: flex;
+  gap: 10px;
+  transition: transform 0.4s ease;
+  position: relative;
+}
+
+.case {
+  width: 120px;
+  height: 100px;
+  background: v.$color-white;
+  border: 2px solid #ccc;
+  flex-shrink: 0;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  position: relative;
+  box-sizing: border-box;
+}
+
+.case::after {
+  content: attr(data-num);
+  position: absolute;
+  bottom: 4px;
+  right: 6px;
+  font-size: 0.7rem;
+  color: v.$color-black;
+}
+
+.case.debut {
+  background-color: lightgreen;
+}
+
+.case.fin {
+  background-color: gold;
+}
+
+.case.banqueroute {
+  background-color: #ffdede;
+}
+
+.case.prison {
+  background-color: #ccccff;
+}
+
+.pion {
+  position: absolute;
+  left: calc(50% - 15px);
+  top: 10px;
+  z-index: 10;
+  width: 30px;
+  height: 30px;
+  transition: top 0.3s ease;
+}
+
+.pion img {
+  width: 100%;
+  height: auto;
+}
+
+#questionBox {
+  margin-top: 1rem;
+}
+
+#choices button {
+  display: block;
+  margin: 5px auto;
+  padding: 10px;
+  width: 60%;
+  font-size: 1rem;
+}
+
+#rollBtn {
+  margin: 1rem auto;
+  padding: 10px 20px;
+  font-size: 1.2rem;
+  cursor: pointer;
+}

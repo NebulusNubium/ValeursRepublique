@@ -1,12 +1,30 @@
 {% extends 'base.html.twig' %}
 
-{% block title %}Bienvenue{% endblock %}
+{% block title %}Les valeurs de la République{% endblock %}
 
 {% block main %}
-    <main id="home">
-        <div class="container">
-            <h1>Les valeurs de la République</h1>
-            <p>Lorem ipsum dolor sit, amet consectetur adipisicing elit. Odio similique natus vero repudiandae temporibus ad dolorum fugiat quasi aliquid inventore, vitae id vel enim corporis atque dolor voluptates distinctio rerum quibusdam qui architecto eligendi assumenda. Ut, velit recusandae distinctio nam fugiat corrupti voluptatem tempore assumenda eos similique est, doloribus eius consectetur repellat iure? Alias minima nemo voluptatum quis! Ut, a.</p>
-        </div>
-    </main>
+    <section class="accueil-section">
+        <h1>Les valeurs de la République</h1>
+        <p>
+            Bienvenue sur notre plateforme dédiée aux valeurs fondatrices de la République française : 
+            <strong>Liberté, Égalité, Fraternité</strong>.
+        </p>
+        <p>
+            Ici, vous pouvez explorer ces valeurs à travers un <strong>jeu de l’oie</strong> original : un véritable 
+            <em>jeu de loi</em> éducatif et ludique. 
+        </p>
+
+        {% if not app.user %}
+            <div class="message-connexion">
+                <p>🎲 Pour participer au jeu de l’oie et tester vos connaissances sur les valeurs de la République, vous devez être connecté.</p>
+                <a href="{{ path('app_login') }}" class="btn-cta">Se connecter</a>
+                <a href="{{ path('app_register') }}" class="btn-cta">S'inscrire</a>
+            </div>
+        {% else %}
+            <div class="message-connexion">
+                <p>✅ Vous êtes connecté ! Cliquez ci-dessous pour commencer le jeu de l’oie.</p>
+                <a href="{{ path('app_jeu') }}" class="btn-cta">Jouer maintenant</a>
+            </div>
+        {% endif %}
+    </section>
 {% endblock %}

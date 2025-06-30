@@ -1,4 +1,11 @@
-@use 'base/_base.scss';
+
+//BASE
+@use 'base/base';
+@use 'base/navbar';
+
+
+//PAGES
 @use "pages/glossaire";
 @use "pages/jeu";
-
+@use "pages/home";
+@use "pages/login";

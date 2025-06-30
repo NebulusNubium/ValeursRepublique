@@ -10,18 +10,15 @@
             {{ encore_entry_link_tags('app') }}
         {% endblock %}
         
-        {% block javascripts %}
-            {{ encore_entry_script_tags('app') }}
-            {% block importmap %}{{ importmap('app') }}{% endblock %}
-        {% endblock %}
 
-        <link rel="stylesheet" href="{{ asset('style/style.css') }}">
+        <link rel="stylesheet" href="{{ asset('styles/style.css') }}">
     </head>
     <body>
         {% block header %}
             <nav>
                 <ul class="navbar-main">
                     <li><a href="{{ path('app_home') }}" class="listes">Accueil</a></li>
+                    <li><a href="{{ path('glossaire') }}" class="listes">Glossaire</a></li>
                     {% if app.user %}
                         <li><a href="{{ path('app_jeu') }}">Jouer</a></li>
                         <li class="logout-item">
@@ -41,4 +38,8 @@
         {% endblock %}
         {% block main %}{% endblock %}
     </body>
+        {% block javascripts %}
+            {{ encore_entry_script_tags('app') }}
+            
+        {% endblock %}
 </html>

@@ -1,10 +1,30 @@
 {% extends 'base.html.twig' %}
-
 {% block main %}
-    <main id="jeu">
-        <div class="container">
-            <h2>Bienvenue sur le jeu de Loi</h2>
-            
-        </div>
-    </main>
+<body>
+  <div id="game">
+    <div class="header">
+      <h1>Jeu de Loi</h1>
+      <h2>Les valeurs de la République</h2>
+      <div id="timer">⏱ 0:00</div>
+    </div>
+
+    <div class="board-container">
+      <div class="pion" id="pion"><img src="img/pion.png" alt="Pion"/></div>
+      <div class="carrousel-wrapper">
+        <div class="carrousel" id="carrousel"></div>
+      </div>
+    </div>
+
+    <div id="questionBox">
+      <p id="questionText">Clique sur lancer pour démarrer</p>
+      <div id="choices"></div>
+      <a id="sourceLink" href="#" target="_blank" style="display:none">Voir source officielle</a>
+    </div>
+
+    <button id="rollBtn">🎲 Lancer le dé</button>
+  </div>
+
+
+</body>
 {% endblock %}
+

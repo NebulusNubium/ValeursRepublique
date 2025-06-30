@@ -1,0 +1,67 @@
+// assets/styles/navbar.scss
+
+$bleu-republique: #0055a4;
+$blanc-republique: #ffffff;
+$rouge-republique: #ef4135;
+$gris-text: #333;
+
+nav {
+  background: linear-gradient(90deg, $bleu-republique 0%, $blanc-republique 50%, $rouge-republique 100%);
+  padding: 1rem 2rem;
+  box-shadow: 0 4px 10px rgba(0, 0, 0, 0.1);
+}
+
+.navbar-main {
+  list-style: none;
+  display: flex;
+  justify-content: flex-end;
+  align-items: center;
+  margin: 0;
+  padding: 0;
+
+  li {
+    margin-left: 2rem;
+    position: relative;
+
+    a,
+    button {
+      text-decoration: none;
+      color: $gris-text;
+      font-weight: bold;
+      background: transparent;
+      border: none;
+      font-size: 1.1rem;
+      cursor: pointer;
+      transition: all 0.3s ease;
+
+      &:hover {
+        color: $bleu-republique;
+        transform: scale(1.05);
+      }
+    }
+
+    form {
+      display: inline;
+    }
+  }
+
+  .logout-item button {
+    color: $rouge-republique;
+
+    &:hover {
+      color: darken($rouge-republique, 15%);
+    }
+  }
+}
+
+// Ajustement pour le mode mobile
+@media (max-width: 768px) {
+  .navbar-main {
+    flex-direction: column;
+    align-items: flex-start;
+
+    li {
+      margin: 0.5rem 0;
+    }
+  }
+}
