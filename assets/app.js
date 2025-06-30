@@ -7,214 +7,6 @@
  */
 import './styles/app.scss';
 
-
-console.log('This log comes from assets/app.js - welcome to AssetMapper! 🎉');
-
-const carrousel = document.getElementById("carrousel");
-const pion = document.getElementById("pion");
-const rollBtn = document.getElementById("rollBtn");
-const questionText = document.getElementById("questionText");
-const sourceLink = document.getElementById("sourceLink");
-const choicesDiv = document.getElementById("choices");
-const timerDisplay = document.getElementById("timer");
-
-let position = 0;
-let previousPosition = 0;
-let hasAnswered = true;
-let timerStarted = false;
-let startTime;
-let timerInterval;
-
-let fromBonus = false;
-let wrongStreak = 0;
-const prisonCase = 13;
-const banquerouteCases = Array.from({ length: questions.length }, (_, i) => i).filter(i => i !== 0 && i % 7 === 0);
-const totalCases = questions.length;
-
-function formatTime(seconds) {
-  const m = Math.floor(seconds / 60);
-  const s = seconds % 60;
-  return `${m}:${s < 10 ? "0" : ""}${s}`;
-}
-
-function startTimer() {
-  if (!timerStarted) {
-    startTime = Date.now();
-    timerInterval = setInterval(() => {
-      const elapsed = Math.floor((Date.now() - startTime) / 1000);
-      timerDisplay.innerText = "⏱ " + formatTime(elapsed);
-    }, 1000);
-    timerStarted = true;
-  }
-}
-
-function addPenaltyTime(seconds) {
-  startTime -= seconds * 1000;
-}
-
-function stopTimer() {
-  clearInterval(timerInterval);
-}
-
-function createCases() {
-  for (let i = 0; i < totalCases; i++) {
-    const el = document.createElement("div");
-    el.classList.add("case");
-    if (i === 0) {
-      el.classList.add("debut");
-      el.innerText = "Départ";
-    } else if (i === totalCases - 1) {
-      el.classList.add("fin");
-      el.innerText = "Arrivée";
-    } else if (banquerouteCases.includes(i)) {
-      el.innerText = "💣";
-      el.classList.add("banqueroute");
-    } else if (i === prisonCase) {
-      el.innerText = "⛓ Prison";
-      el.classList.add("prison");
-    }
-    el.dataset.num = i;
-    carrousel.appendChild(el);
-  }
-}
-
-function scrollToCase(index) {
-  const oneCase = document.querySelector(".case");
-  const caseWidth = oneCase.offsetWidth;
-  const computedStyle = getComputedStyle(carrousel);
-  const gap = parseInt(computedStyle.columnGap || computedStyle.gap || 0); // 
-
-  const totalWidthPerCase = caseWidth + gap;
-  const targetX = totalWidthPerCase * index - (carrousel.parentElement.offsetWidth / 2 - caseWidth / 2);
-  carrousel.style.transform = `translateX(${-targetX}px)`;
-}
-
-function displayQuestion(index) {
-  if (fromBonus) {
-    questionText.innerText = "Vous venez d'atterrir. Relancez le dé.";
-    fromBonus = false;
-    rollBtn.disabled = false;
-    choicesDiv.innerHTML = "";
-    sourceLink.style.display = "none";
-    return;
-  }
-
-  const q = questions[index];
-  if (!q.text) {
-    rollBtn.disabled = false;
-    questionText.innerText = "Cliquez sur lancer pour avancer.";
-    choicesDiv.innerHTML = "";
-    sourceLink.style.display = "none";
-    return;
-  }
-
-  hasAnswered = false;
-  questionText.innerText = q.text;
-  sourceLink.href = q.url;
-  sourceLink.style.display = "none";
-  choicesDiv.innerHTML = "";
-
-  q.choices.forEach((choice, idx) => {
-    const btn = document.createElement("button");
-    btn.innerText = choice;
-    btn.onclick = () => {
-      if (hasAnswered) return;
-      hasAnswered = true;
-      sourceLink.style.display = "inline";
-
-      if (idx === q.correctIndex) {
-        wrongStreak = 0;
-        const bonus = q.level;
-        if (bonus > 0) {
-          questionText.innerText = `🎉 Félicitations, bonus +${bonus}. Vous vous envolé à votre destination !`;
-          pion.style.visibility = "hidden";
-          fromBonus = true;
-          setTimeout(() => {
-            position = Math.min(position + bonus, totalCases - 1);
-            scrollToCase(position);
-            setTimeout(() => {
-              pion.style.visibility = "visible";
-              afterMove();
-            }, 600);
-          }, 500);
-        } else {
-          rollBtn.disabled = false;
-        }
-      } else {
-        wrongStreak++;
-        if (wrongStreak >= 2) {
-          questionText.innerText = "❌ 2 erreurs ! Vous retournez à la case Départ (Prison) et +10 secondes.";
-          addPenaltyTime(10);
-          position = 0;
-          scrollToCase(position);
-          document.querySelector(".debut").innerText = "Prison";
-          wrongStreak = 0;
-        } else {
-          questionText.innerText = "❌ Mauvaise réponse. Retour à la case précédente.";
-          position = previousPosition;
-          scrollToCase(position);
-        }
-        rollBtn.disabled = false;
-      }
-    };
-    choicesDiv.appendChild(btn);
-  });
-}
-
-function afterMove() {
-  if (position === totalCases - 1) {
-    stopTimer();
-    document.getElementById("questionBox").innerHTML = "<h2>🎉 Félicitations, vous avez terminé le jeu !</h2><img src='img/victoire.png' alt='Victoire' style='max-width: 300px; margin-top: 1rem;'>";
-    rollBtn.disabled = true;
-    return;
-  }
-
-  if (banquerouteCases.includes(position)) {
-    questionText.innerText = "💥 Banqueroute ! Vous retournez à la case précédente.";
-    position = Math.max(position - 1, 0);
-    scrollToCase(position);
-    rollBtn.disabled = false;
-    return;
-  }
-
-  if (position === prisonCase) {
-    questionText.innerText = "⛓ Vous êtes en prison ! Tour bloqué.";
-    setTimeout(() => {
-      rollBtn.disabled = false;
-    }, 2000);
-    return;
-  }
-
-  displayQuestion(position);
-}
-
-rollBtn.addEventListener("click", () => {
-  if (!hasAnswered) return;
-  startTimer();
-  previousPosition = position;
-  const lancer = Math.floor(Math.random() * 6) + 1;
-  const target = Math.min(position + lancer, totalCases - 1);
-  rollBtn.disabled = true;
-  questionText.innerText = `🎲 Vous avez lancé un ${lancer} !`;
-
-  let i = position + 1;
-  function step() {
-    if (i > target) {
-      position = target;
-      afterMove();
-      return;
-    }
-    scrollToCase(i);
-    i++;
-    setTimeout(step, 350);
-  }
-  step();
-});
-
-createCases();
-scrollToCase(0);
-
-
 // QUESTIONS 
 
 const questions = [
@@ -769,3 +561,213 @@ const questions = [
     "url": "https://www.cheminsdememoire.gouv.fr/fr/les-valeurs-et-les-symboles-de-la-republique-francaise"
   }
 ];
+
+
+
+console.log('This log comes from assets/app.js - welcome to AssetMapper! 🎉');
+
+const carrousel = document.getElementById("carrousel");
+const pion = document.getElementById("pion");
+const rollBtn = document.getElementById("rollBtn");
+const questionText = document.getElementById("questionText");
+const sourceLink = document.getElementById("sourceLink");
+const choicesDiv = document.getElementById("choices");
+const timerDisplay = document.getElementById("timer");
+
+let position = 0;
+let previousPosition = 0;
+let hasAnswered = true;
+let timerStarted = false;
+let startTime;
+let timerInterval;
+
+let fromBonus = false;
+let wrongStreak = 0;
+const prisonCase = 13;
+const banquerouteCases = Array.from({ length: questions.length }, (_, i) => i).filter(i => i !== 0 && i % 7 === 0);
+const totalCases = questions.length;
+
+function formatTime(seconds) {
+  const m = Math.floor(seconds / 60);
+  const s = seconds % 60;
+  return `${m}:${s < 10 ? "0" : ""}${s}`;
+}
+
+function startTimer() {
+  if (!timerStarted) {
+    startTime = Date.now();
+    timerInterval = setInterval(() => {
+      const elapsed = Math.floor((Date.now() - startTime) / 1000);
+      timerDisplay.innerText = "⏱ " + formatTime(elapsed);
+    }, 1000);
+    timerStarted = true;
+  }
+}
+
+function addPenaltyTime(seconds) {
+  startTime -= seconds * 1000;
+}
+
+function stopTimer() {
+  clearInterval(timerInterval);
+}
+
+function createCases() {
+  for (let i = 0; i < totalCases; i++) {
+    const el = document.createElement("div");
+    el.classList.add("case");
+    if (i === 0) {
+      el.classList.add("debut");
+      el.innerText = "Départ";
+    } else if (i === totalCases - 1) {
+      el.classList.add("fin");
+      el.innerText = "Arrivée";
+    } else if (banquerouteCases.includes(i)) {
+      el.innerText = "💣";
+      el.classList.add("banqueroute");
+    } else if (i === prisonCase) {
+      el.innerText = "⛓ Prison";
+      el.classList.add("prison");
+    }
+    el.dataset.num = i;
+    carrousel.appendChild(el);
+  }
+}
+
+function scrollToCase(index) {
+  const oneCase = document.querySelector(".case");
+  const caseWidth = oneCase.offsetWidth;
+  const computedStyle = getComputedStyle(carrousel);
+  const gap = parseInt(computedStyle.columnGap || computedStyle.gap || 0); // 
+
+  const totalWidthPerCase = caseWidth + gap;
+  const targetX = totalWidthPerCase * index - (carrousel.parentElement.offsetWidth / 2 - caseWidth / 2);
+  carrousel.style.transform = `translateX(${-targetX}px)`;
+}
+
+function displayQuestion(index) {
+  if (fromBonus) {
+    questionText.innerText = "Vous venez d'atterrir. Relancez le dé.";
+    fromBonus = false;
+    rollBtn.disabled = false;
+    choicesDiv.innerHTML = "";
+    sourceLink.style.display = "none";
+    return;
+  }
+
+  const q = questions[index];
+  if (!q.text) {
+    rollBtn.disabled = false;
+    questionText.innerText = "Cliquez sur lancer pour avancer.";
+    choicesDiv.innerHTML = "";
+    sourceLink.style.display = "none";
+    return;
+  }
+
+  hasAnswered = false;
+  questionText.innerText = q.text;
+  sourceLink.href = q.url;
+  sourceLink.style.display = "none";
+  choicesDiv.innerHTML = "";
+
+  q.choices.forEach((choice, idx) => {
+    const btn = document.createElement("button");
+    btn.innerText = choice;
+    btn.onclick = () => {
+      if (hasAnswered) return;
+      hasAnswered = true;
+      sourceLink.style.display = "inline";
+
+      if (idx === q.correctIndex) {
+        wrongStreak = 0;
+        const bonus = q.level;
+        if (bonus > 0) {
+          questionText.innerText = `🎉 Félicitations, bonus +${bonus}. Vous vous envolé à votre destination !`;
+          pion.style.visibility = "hidden";
+          fromBonus = true;
+          setTimeout(() => {
+            position = Math.min(position + bonus, totalCases - 1);
+            scrollToCase(position);
+            setTimeout(() => {
+              pion.style.visibility = "visible";
+              afterMove();
+            }, 600);
+          }, 500);
+        } else {
+          rollBtn.disabled = false;
+        }
+      } else {
+        wrongStreak++;
+        if (wrongStreak >= 2) {
+          questionText.innerText = "❌ 2 erreurs ! Vous retournez à la case Départ (Prison) et +10 secondes.";
+          addPenaltyTime(10);
+          position = 0;
+          scrollToCase(position);
+          document.querySelector(".debut").innerText = "Prison";
+          wrongStreak = 0;
+        } else {
+          questionText.innerText = "❌ Mauvaise réponse. Retour à la case précédente.";
+          position = previousPosition;
+          scrollToCase(position);
+        }
+        rollBtn.disabled = false;
+      }
+    };
+    choicesDiv.appendChild(btn);
+  });
+}
+
+function afterMove() {
+  if (position === totalCases - 1) {
+    stopTimer();
+    document.getElementById("questionBox").innerHTML = "<h2>🎉 Félicitations, vous avez terminé le jeu !</h2><img src='img/victoire.png' alt='Victoire' style='max-width: 300px; margin-top: 1rem;'>";
+    rollBtn.disabled = true;
+    return;
+  }
+
+  if (banquerouteCases.includes(position)) {
+    questionText.innerText = "💥 Banqueroute ! Vous retournez à la case précédente.";
+    position = Math.max(position - 1, 0);
+    scrollToCase(position);
+    rollBtn.disabled = false;
+    return;
+  }
+
+  if (position === prisonCase) {
+    questionText.innerText = "⛓ Vous êtes en prison ! Tour bloqué.";
+    setTimeout(() => {
+      rollBtn.disabled = false;
+    }, 2000);
+    return;
+  }
+
+  displayQuestion(position);
+}
+
+rollBtn.addEventListener("click", () => {
+  if (!hasAnswered) return;
+  startTimer();
+  previousPosition = position;
+  const lancer = Math.floor(Math.random() * 6) + 1;
+  const target = Math.min(position + lancer, totalCases - 1);
+  rollBtn.disabled = true;
+  questionText.innerText = `🎲 Vous avez lancé un ${lancer} !`;
+
+  let i = position + 1;
+  function step() {
+    if (i > target) {
+      position = target;
+      afterMove();
+      return;
+    }
+    scrollToCase(i);
+    i++;
+    setTimeout(step, 350);
+  }
+  step();
+});
+
+createCases();
+scrollToCase(0);
+
+
