@@ -3,9 +3,12 @@
 @use 'base/base';
 @use 'base/navbar';
 
+@use 'abstracts/variables';
 
 //PAGES
 @use "pages/glossaire";
 @use "pages/jeu";
 @use "pages/home";
 @use "pages/login";
+@use "pages/footer";
+@use "pages/register";

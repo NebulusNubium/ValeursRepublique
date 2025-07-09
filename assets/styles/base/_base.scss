@@ -8,3 +8,19 @@ body {
     padding: 0;
     max-width: 1440px;
 }
+
+
+::-webkit-scrollbar {
+  width: 12px; /* largeur de la barre */
+}
+
+::-webkit-scrollbar-track {
+  background: #f0f0f0; /* fond de la piste */
+  border-radius: 10px;
+}
+
+::-webkit-scrollbar-thumb {
+  background: linear-gradient(to bottom, #0055A4, #ffffff, #EF4135); /* Bleu-Blanc-Rouge */
+  border-radius: 10px;
+  border: 2px solid #f0f0f0;
+}

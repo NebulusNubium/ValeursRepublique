@@ -3,21 +3,35 @@
 {% block title %}Glossaire{% endblock %}
 
 {% block main %}
-<body id="glossaire">
+<main id="glossaire">
     <video autoplay loop muted playsinline id="background-video">
         <source src="{{asset("bg.mp4")}}" type="video/mp4">
     </video>
-    <main>
-    
+    <main id="gloss">
         <section id="valeurs">
-        <h1>Valeurs de la République</h1>
-        <a href="https://www.education.gouv.fr/la-ministre-d-etat-ministre-de-l-education-nationale-de-l-enseignement-superieur-et-de-la-recherche-209">Lien vers la page officielle de l'Education Nationale et de l'enseignement supérieur</a>
-        <br>
-        <a href="https://valeurs-de-la-republique.reseau-canope.fr/">Liste officielle des valeurs de notre république</a>
-
+        <div class="cadre-container">
+            <div class="cadreB"><div class="sep">
+                <img src="{{asset('img/sepG.png')}}" alt="">
+            </div>
+            </div>
+            <div class="cadre">
+                <h1>Valeurs de la République</h1>
+                <a href="https://www.education.gouv.fr/la-ministre-d-etat-ministre-de-l-education-nationale-de-l-enseignement-superieur-et-de-la-recherche-209">Lien vers la page officielle de l'Education Nationale et de l'enseignement supérieur</a>
+                <br>
+                <br>
+                <a href="https://valeurs-de-la-republique.reseau-canope.fr/">Liste officielle des valeurs de notre république</a>
+            </div>
+            <div class="cadreA"><div class="sep">
+                <img src="{{asset('img/sepD.png')}}" alt="">
+            </div> 
+        </div>
+        </div>
+        
         <h2>Glossaire</h2>
+
+        <div class="sep"><img src="{{asset('img/SEP.png')}}" alt=""></div>
         <h3>Les Valeurs et Principes Fondamentaux</h3>
-        <p>Ces valeurs sont celles retenues par l’Enseignement Moral et Civique : liberté, égalité, fraternité, esprit de justice, et respect. De plus, il y a 4 principes de la république.
+        <p class="style">Ces valeurs sont celles retenues par l’Enseignement Moral et Civique : liberté, égalité, fraternité, esprit de justice, et respect. De plus, il y a 4 principes de la république.
         </p>
         <div class="cards">        
         <li>
@@ -49,6 +63,8 @@
             </li>
             <li><strong>La République sociale</strong> Elle reconnaît que la société doit œuvrer à l'éradication de la pauvreté et à l'assurance d'une égalité des chances pour tous.</li>
         </div>
+
+        <div class="sep"><img src="{{asset('img/SEP.png')}}" alt=""></div>
         <h3>Les Symboles</h3>
         <div class="cards">
             <li>
@@ -86,19 +102,21 @@
         </ul>
         </section>
 
+        <div class="sep"><img src="{{asset('img/SEP.png')}}" alt=""></div>
         <section id="histoire">
         <div class="histoireRepublique">
-            <h2>Un peu d'Histoire de la République</h2>
+            <h3>Un peu d'Histoire de la République</h3>
             <div class="cards">
-                <li>La République française naît véritablement en 1792, au cœur de la Révolution, quand les citoyens rejettent définitivement la monarchie absolue et proclament des valeurs nouvelles : Liberté, Égalité, et Fraternité. Ces idéaux éclairent une France désormais guidée par la souveraineté populaire et l'affirmation des droits fondamentaux. 
+                <li><strong>La République Française</strong> Elle naît véritablement en 1792, au cœur de la Révolution, quand les citoyens rejettent définitivement la monarchie absolue et proclament des valeurs nouvelles : Liberté, Égalité, et Fraternité. Ces idéaux éclairent une France désormais guidée par la souveraineté populaire et l'affirmation des droits fondamentaux. 
                 <br> Après une période tumultueuse où ces valeurs se cherchent et se précisent, la Troisième République (1870-1940) consolide durablement ce socle moral et politique. Elle impose notamment la Laïcité, garantissant la liberté de conscience, séparant l’État des religions en 1905, et affirmant ainsi son impartialité face aux croyances individuelles.</li>
-                <li>À travers les siècles, la République poursuit sa mission d'universalité en plaçant au cœur de son identité l’Esprit de justice et le Respect absolu des personnes. Face aux guerres et aux crises, elle cultive une Solidarité active entre les citoyens, bâtie sur l’intérêt général et la cohésion sociale.</li>
-                <li>Au lendemain de la Seconde Guerre mondiale, la Quatrième puis la Cinquième République inscrivent dans leurs textes fondamentaux l’Absence de toute forme de discriminations, renforçant l'idéal d’une société inclusive et équitable.
+                <li class="align">À travers les siècles, la République poursuit sa mission d'universalité en plaçant au cœur de son identité l’Esprit de justice et le Respect absolu des personnes. Face aux guerres et aux crises, elle cultive une Solidarité active entre les citoyens, bâtie sur l’intérêt général et la cohésion sociale.</li>
+                <li class="align">Au lendemain de la Seconde Guerre mondiale, la Quatrième puis la Cinquième République inscrivent dans leurs textes fondamentaux l’Absence de toute forme de discriminations, renforçant l'idéal d’une société inclusive et équitable.
                 <br> Aujourd'hui encore, ces valeurs restent le fondement vivant d'une République tournée vers l’avenir, enracinée dans la défense constante des droits humains, l’égalité réelle des citoyens, et la fraternité universelle.</li>
             </div>
         </div>
+        <div class="sep"><img src="{{asset('img/SEP.png')}}" alt=""></div>
         <div class="histoireDrapeau">
-            <h2>L'Histoire de notre drapeau</h2>
+            <h3>L'Histoire de notre drapeau</h3>
             <div class="cards">
                 <li>Le drapeau français, emblème national tricolore bleu, blanc et rouge, apparaît durant la Révolution française en 1789. Il est adopté officiellement en 1794 sous la Première République, affirmant ainsi la rupture avec l’Ancien Régime monarchique et ses symboles.</li>
                 <li>Les couleurs ont une signification profonde : <br>

@@ -1,28 +1,87 @@
 @use '../abstracts/variables' as v;
 #glossaire {
-    #background-video {
-  position: fixed;
-  top: 50%;
-  left: 50%;
-  min-width: 100%;
-  min-height: 100%;
-  width: auto;
-  height: auto;
-  z-index: -1;
-  transform: translate(-50%, -50%);
-  background-size: cover;
-  object-fit: cover;
-  opacity: 0.2;
-}
+  #background-video {
+      position: fixed;
+      top: 50%;
+      left: 50%;
+      min-width: 100%;
+      min-height: 100%;
+      width: auto;
+      height: auto;
+      z-index: -1;
+      transform: translate(-50%, -50%);
+      background-size: cover;
+      object-fit: cover;
+      opacity: 0.2;
+  }
+  .style{
+    display: inline-block;
+    text-shadow: 2px 2px 4px rgba(0, 0, 0, 0.7);
+  }
+  .sep{
+      width: 30%;
+      margin: 3rem auto;
+      img{
+        width: 100%;
+      }
+  }
+  .align{
+    text-align: center;
+  }
+  .cadre-container{
+        display: flex;
+        justify-content: center;
+        align-items: center;
+        width: 100%;
+        .cadreB,.cadreA{
+          width: 8%;
+          img{width: 100%;}
+        }
+        .cadreA{
+          margin-left: -3%;
+        }
+        .cadreB{
+          margin-right: -3%;
+        }
+        .cadre{
+          background-color: white;
+          border-radius: 10px;
+          padding: 1rem;
+          padding-bottom: 2rem;
+          text-align: center;
+          height: 30%;
+        }
+      }
   main {
+      p {
+    text-align: justify;
+    margin: 1rem 0;
+    line-height: 1.6;
+    color: v.$color-black;
+  }
+
+  a {
+    color: v.$color-blue;
+    text-decoration: none;
+    &:hover {
+      text-decoration: underline;
+    }
+  }
+    margin-bottom: 3rem;
     section {
       padding: 2rem;
       list-style: none;
-
       h2, h3 {
         text-align: center;
         margin-bottom: 1rem;
         color: v.$color-black;
+        text-shadow: 2px 2px 4px rgba(0, 0, 0, 0.7);
+      }
+      h2{
+        font-size: 3rem;
+      }
+      h3{
+        font-size: 2rem;
       }
 
       .cards {
@@ -31,9 +90,11 @@
         justify-content: space-between;
         padding: 0;
         margin-top: 2rem;
+        flex-wrap: wrap;
 
         li {
-          flex: 1 1 30%;
+          width: 30%;
+          
           background-color: v.$color-white;
           border-radius: 10px;
           padding: 1rem;
@@ -66,46 +127,67 @@
       }
     }
   }
-@media screen and (max-width: 550px) {
-    .cards{
-        flex-direction: column;
-        gap: 0;
-        li{
-            margin: 0;
-            padding: 0;
-            
-          &:nth-child(3n+1) {
-            border-left: 5px solid v.$color-blue;
-            border-right: 5px solid v.$color-red;
-            border-top: white !important;
-          }
 
-          &:nth-child(3n+2) {
-            border-left: 5px solid v.$color-blue;
-            border-right: 5px solid v.$color-red;
-            border-top: white;
-          }
+@media screen and (max-width: 1000px) {
 
-          &:nth-child(3n+3) {
-            border-left: 5px solid v.$color-blue;
-            border-right: 5px solid v.$color-red;
-            border-top: white !important;
+  #glossaire {
+        .cadre-container {
+          .cadre {
+            width: 100%;
           }
         }
+      }
     }
-}
-  p {
-    text-align: justify;
-    margin: 1rem 0;
-    line-height: 1.6;
-    color: v.$color-black;
-  }
 
-  a {
-    color: v.$color-blue;
-    text-decoration: none;
-    &:hover {
-      text-decoration: underline;
-    }
+
+@media screen and (max-width: 550px) {
+  #glossaire main section .cards li {
+    width: inherit !important;
   }
+  #glossaire {
+        .cadre-container {
+          .cadre {
+            width: 100%;
+          }
+        }
+      }
+    }
+  main{
+    section{
+      .cards{
+          gap: 1rem;
+          flex-direction: column;
+          align-content: center;
+          .card{
+            width: 100% !important;
+
+          }
+          li{
+              margin: 0 auto;
+              padding-top: 0rem;
+              padding: 0.3rem;
+              width: 30%;
+              
+            &:nth-child(3n+1) {
+              border-left: 5px solid v.$color-blue;
+              border-right: 5px solid v.$color-red;
+              border-top: white !important;
+            }
+  
+            &:nth-child(3n+2) {
+              border-left: 5px solid v.$color-blue;
+              border-right: 5px solid v.$color-red;
+              border-top: white;
+            }
+  
+            &:nth-child(3n+3) {
+              border-left: 5px solid v.$color-blue;
+              border-right: 5px solid v.$color-red;
+              border-top: white !important;
+            }
+          }
+        }
+      }
+    }
 }
+

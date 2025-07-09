@@ -1,111 +1,276 @@
 @use '../abstracts/variables' as v;
 
-
-
 #game {
-    width: 80%;
+    background: v.$color-white;
+    color: v.$color-black;
+    padding: 2rem;
+    border-radius: 1rem;
+    max-width: 1000px;
     margin: auto;
-}
+    box-shadow: 0 0 20px rgba(0, 0, 0, 0.2);
+    position: relative;
+    overflow: hidden;
+  
 
-.header {
+    &::before {
+        content: "🪿🪿";
+        font-size: 6rem;
+        position: absolute;
+        top: 2rem;
+        right: 1.2rem;
+        transform: rotate(-10deg);
+        opacity: 0.1;
+    }
+    }
+
+    .header {
     display: flex;
-    justify-content: space-between;
+    justify-content: center;
     align-items: center;
-    margin: 1rem 0;
-}
+    flex-direction: column;
+    gap: 0.3rem;
 
-#timer {
-    font-weight: bold;
-}
+    h1 {
+        font-size: 2.5rem;
+        color: v.$color-blue;
+    }
 
-.board-container {
+    h2 {
+        font-size: 1.2rem;
+        color: v.$color-red;
+    }
+
+    #timer {
+        font-weight: bold;
+        font-size: 1.1rem;
+        color: v.$color-black;
+    }
+    }
+
+    .board-container {
     position: relative;
-    width: 100%;
-    height: 120px;
-    margin: 1rem 0;
-    overflow: hidden;
-}
+    height: 140px;
+    margin: 2rem 0;
+    }
 
-.carrousel-wrapper {
+    .carrousel-wrapper {
     overflow: hidden;
-    width: 100%;
-}
+    }
 
-.carrousel {
+    .carrousel {
     display: flex;
-    gap: 10px; /* IMPORTANT pour le calcul JS */
+    gap: 12px;
     transition: transform 0.4s ease;
-    position: relative;
-}
+    }
 
-.case {
+    .case {
     width: 120px;
     height: 100px;
-    background: white;
-    border: 2px solid #ccc;
-    flex-shrink: 0;
+    background: v.$color-white;
+    border: 2px solid v.$color-black;
+    border-radius: 10px;
+    font-weight: bold;
     display: flex;
-    align-items: center;
     justify-content: center;
+    align-items: center;
+    flex-shrink: 0;
     position: relative;
-    box-sizing: border-box;
+    box-shadow: 2px 2px 6px rgba(0, 0, 0, 0.1);
+
+    &::after {
+        content: attr(data-num);
+        position: absolute;
+        bottom: 5px;
+        right: 6px;
+        font-size: 0.75rem;
+        color: v.$color-black;
+    }
+
+    &.debut {
+        background: v.$color-green;
+        border: 2px dashed v.$color-black;
+    }
+
+    &.fin {
+        background: v.$color-gold;
+        border: 2px solid v.$color-gold;
+        color: v.$color-blue;
+    }
+
+    &.banqueroute {
+        background: v.$color-banqueroute;
+        color: darken(v.$color-red, 20%);
+    }
+
+    &.prison {
+        background: v.$color-prison;
+        color: v.$color-black;
+    }
+    }
+    .modal {
+    position: fixed;
+    z-index: 100;
+    left: 0;
+    top: 0;
+    width: 100%;
+    height: 100%;
+    background-color:rgba(0, 38, 84, 0.152);
+    display: flex;
+    justify-content: center;
+    align-items: center;
+}
+.modal-content {
+    background-color: #002654;
+    padding: 20px;
+    border-radius: 10px;
+    max-width: 80vw;
+    width: 90%;
+    box-shadow: 0 4px 8px rgba(0, 0, 0, 0.2);
+    position: relative;
+}
+.modal-content h2 {
+    color: #EF4135;
+    margin-bottom: 1rem;
+    font-size: 3rem;
+    padding: 2rem;
 }
 
-.case::after {
-    content: attr(data-num);
+.modal-content p {
+    color: whitesmoke;
+    padding: 2rem;
+    font-size: 1.5rem;
+}
+.close {
     position: absolute;
-    bottom: 4px;
-    right: 6px;
-    font-size: 0.7rem;
-    color: #555;
+    top: 10px;
+    right: 15px;
+    font-size: 1.5em;
+    cursor: pointer;
+    color: #333;
+}
+.close:hover {
+    color: #EF4135;
 }
 
-.case.debut {
-    background-color: lightgreen;
-}
-
-.case.fin {
-    background-color: gold;
-}
-
-.case.banqueroute {
-    background-color: #ffdede;
-}
-
-.case.prison {
-    background-color: #ccccff;
-}
-
-.pion {
+    .pion {
     position: absolute;
-    left: calc(50% - 15px);
+    left: calc(50% - 20px);
     top: 10px;
     z-index: 10;
-    width: 30px;
-    height: 30px;
-    transition: top 0.3s ease;
-}
+    width: 40px;
+    height: 40px;
+    animation: bounce 0.3s ease;
+    }
 
-.pion img {
+    @keyframes bounce {
+    0% { transform: translateY(0); }
+    50% { transform: translateY(-6px); }
+    100% { transform: translateY(0); }
+    }
+
+    .pion img {
     width: 100%;
-    height: auto;
-}
+    }
 
-#questionBox {
-    margin-top: 1rem;
-}
+    #questionBox {
+        
+    margin-top: 1.2rem;
+    background: #f5f5f5;
+    padding: 1rem;
+    border-radius: 10px;
+    
 
-#choices button {
-    display: block;
-    margin: 5px auto;
-    padding: 10px;
-    width: 60%;
+    p {
+        font-weight: bold;
+        color: v.$color-blue;
+        font-size: 2rem;
+    }
+    }
+
+    #choices button {
+    background: v.$color-blue;
+    color: v.$color-white;
+    border: none;
+    margin: 0.5rem auto;
+    padding: 0.8rem 1rem;
+    width: 80%;
     font-size: 1rem;
+    border-radius: 8px;
+    cursor: pointer;
+    // transition: background 0.3s;
+
+        &:hover {
+            background: v.$color-blue;
+        }
+    }
+
+    #rollBtn {
+    background: v.$color-red;
+    color: v.$color-white;
+    padding: 0.8rem 2rem;
+    font-size: 1.2rem;
+    border: none;
+    border-radius: 12px;
+    margin: 1rem 0;
+    cursor: pointer;
+    // transition: background 0.3s ease;
+
+    &:hover {
+        background-color: rgb(200, 15, 67);
+    }
+
+    &:disabled {
+        background: #aaa;
+        cursor: not-allowed;
+    }
+    }
+
+    #rulesBtn {
+    background-color: rgb(8, 86, 203);
+    color: white;
+    padding: 0.8rem 2rem;
+    font-size: 1.2rem;
+    border: none;
+    border-radius: 12px;
+    margin: 1rem 0;
+    cursor: pointer;
+    transition: background-color 0.3s;
+}
+#rulesBtn:hover {
+    background-color: rgb(10, 20, 104);
 }
 
-#rollBtn {
-    margin: 1rem auto;
-    padding: 10px 20px;
-    font-size: 1.2rem;
-    cursor: pointer;
+    #playerNameForm {
+    margin-top: 1rem;
+    input {
+        padding: 10px;
+        font-size: 1rem;
+        border-radius: 6px;
+        border: 1px solid #ccc;
+        width: 220px;
+    }
+    }
+
+    #leaderboard {
+    margin-top: 2rem;
+
+    h3 {
+        margin-bottom: 0.5rem;
+        color: v.$color-blue;
+    }
+
+    ul {
+        list-style: none;
+        padding: 0;
+
+        li {
+        margin: 0.3rem 0;
+        font-weight: bold;
+        }
+    }
+
+    p {
+        margin-top: 1rem;
+        font-style: italic;
+    }
 }

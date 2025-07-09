@@ -6,14 +6,20 @@ $rouge-republique: #ef4135;
 $gris-text: #222;
 $hover-color: #0055a4;
 
+
+.menu {
+    display: none
+}
+
 nav {
   background: linear-gradient(90deg, $bleu-republique 0%, $blanc-republique 50%, $rouge-republique 100%);
   padding: 0.5rem 2rem;
   display: flex;
   align-items: center;
   justify-content: space-between;
-  flex-wrap: wrap;
   box-shadow: 0 4px 12px rgba(0, 0, 0, 0.1);
+  padding: 2rem 10rem;
+  
 
   .navbar-main {
     list-style: none;
@@ -32,12 +38,12 @@ nav {
         font-weight: 600;
         background: transparent;
         border: none;
-        font-size: 1.1rem;
+        font-size: 1.3rem;
         cursor: pointer;
         transition: color 0.3s ease, transform 0.3s ease;
 
         &:hover {
-          color: $hover-color;
+          opacity: 0.65;
           transform: scale(1.05);
         }
       }
@@ -57,24 +63,47 @@ nav {
   }
 
   .logo {
-    display: flex;
-    justify-content: center;
-    align-items: center;
-    flex: 1;
+      display: flex;
+      justify-content: center;
+      align-items: center;
 
-    img {
-      max-height: 50px;
-      transition: transform 0.3s ease;
 
-      &:hover {
-        transform: scale(1.1);
-      }
+      img {
+          max-height: 65px;
+          width: 65px;
+          object-fit: cover;
+          transition: transform 0.3s ease;
+          border-radius: 50%;
+
+          &:hover {
+              transform: scale(1.3);
+          }
+        }
     }
-  }
 }
 
 // Responsive
 @media (max-width: 768px) {
+  a,
+      button {
+        text-decoration: none;
+        color: $gris-text;
+        font-weight: 600;
+        background: transparent;
+        border: none;
+        font-size: 1.1rem;
+        cursor: pointer;
+        transition: color 0.3s ease, transform 0.3s ease;
+
+        &:hover {
+          opacity: 0.65;
+          transform: scale(1.05);
+        }
+      }
+  .menu {
+           display: block !important;
+         }
+
   nav {
     flex-direction: column;
     .navbar-main {
@@ -87,5 +116,49 @@ nav {
     .logo {
       margin: 1rem 0;
     }
+    ul {
+           display: none;
+   
+         }
+     
+         
+         
+         button#burger {
+            display: block !important;
+            background: transparent;
+            border: none;
+            z-index: 1000;
+          }
+          
+          button#burger img {
+              width: 24px;
+              height: 24px;
+          }
+          #navLinks {
+              display: none;
+              flex-direction: column;
+              background-color: rgba(white, 0.95);
+              position: absolute;
+              top: 131px;
+              right: 0;
+              padding: 1rem;
+              border-radius: 8px;
+              z-index: 1000;
+              border-top-left-radius: 0px;
+              border-top-right-radius: 0px;
+              
+            &.active {
+                display: flex;
+                gap: 2vh;
+                width: 20vh;
+                box-shadow: 2px 2px 6px black;
+            }
+          }
+      }
   }
-}
+
+  .deco {
+    color: $bleu-republique;
+  }
+
+  

@@ -1,14 +1,18 @@
 {% extends 'base.html.twig' %}
-
-    <div id="game">
+{% block title %}Jeu de Loi{% endblock %}
+{# {% block stylesheets %}
+    <link rel="stylesheet" href="{{ asset('styles/style.css') }}">
+{% endblock %} #}
+{% block main  %}
+    <div id="game" data-victoire-image="{{ asset('img/felicitation.png') }}">
         <div class="header">
             <h1>Jeu de Loi</h1>
             <h2>Les valeurs de la République</h2>
             <div id="timer">⏱ 0:00</div>
         </div>
-
+      
         <div class="board-container">
-            <div class="pion" id="pion"><img src="{{ asset('images/pion.png') }}" alt="Pion"/></div>
+            <div class="pion" id="pion"><img src="{{ asset('img/pion.png') }}" alt="Pion" style="width: 80px;"></div>
             <div class="carrousel-wrapper">
                 <div class="carrousel" id="carrousel"></div>
             </div>
@@ -21,14 +25,13 @@
         </div>
 
         <button id="rollBtn">🎲 Lancer le dé</button>
+        <button id="rulesBtn" style="margin-left: 10px;">📜 Voir les règles</button>
 
-        <!-- Formulaire pour le nom du joueur -->
         <div id="playerNameForm" style="margin-top: 1rem;">
             <label for="playerNameInput">Votre nom :</label>
             <input type="text" id="playerNameInput" placeholder="Entrez votre nom" maxlength="50">
         </div>
 
-        <!-- Affichage des meilleurs scores -->
         <div id="leaderboard" style="margin-top: 2rem;">
             <h3>Meilleurs scores</h3>
             <ul>
@@ -42,4 +45,38 @@
                 <p>Votre score : {{ current_user_score.playerName }} - {{ current_user_score.timeInSeconds // 60 }}:{{ current_user_score.timeInSeconds % 60 < 10 ? '0' : '' }}{{ current_user_score.timeInSeconds % 60 }}</p>
             {% endif %}
         </div>
-      </div>
+        <!-- Modale pour les règles -->
+        <div id="rulesModal" class="modal" style="display: none;">
+            <div class="modal-content">
+                <span id="closeModal" class="close">&times;</span>
+                <h2>Règles du Jeu de Loi</h2>
+                <p>
+            Bienvenue dans ce jeu de plateau éducatif sur les valeurs de la République française ! <br>Avancez sur un parcours de 50 cases et testez vos connaissances sur la Liberté, l’Égalité, la Fraternité et la Laïcité.<br><br>
+
+            Objectif : <br>
+            - Atteignez la case Arrivée le plus rapidement possible.<br>
+            - Votre temps final est enregistré dans le classement. Entrez votre nom pour personnaliser votre score !
+            <br><br>
+
+            Déroulement du Jeu :<br>
+            - Lancer le dé : Cliquez sur "Lancer le dé" pour avancer de 1 à 6 cases.<br>
+            - Questions : À chaque arrêt, répondez à une question sur les valeurs républicaines.<br>
+              - Bonne réponse : Restez sur la case. Pour les questions de niveau 2, gagnez un bonus (jusqu'à +2 cases).<br>
+              - Mauvaise réponse : Reculez à la case précédente. Trois erreurs consécutives : retour à la case Départ (transformée en "Prison") + pénalité de 10 secondes.
+                <br><br>
+            Cases Spéciales :<br>
+            - Banqueroute (toutes les 7 cases, sauf la première) : Reculez d’une case.<br>
+            - Prison (case 13) : Tour bloqué pendant 2 secondes.<br>
+            - Départ : Point de départ, devient "Prison" après deux erreurs consécutives.<br>
+            - Arrivée (case 50) : Terminez le jeu et enregistrez votre score.<br><br>
+
+            Conseils :<br>
+            - Répondez vite et bien pour minimiser votre temps.<br>
+            - Consultez les sources fournies pour approfondir vos connaissances.<br>
+            - Amusez-vous tout en apprenant les valeurs de la République française !<br>
+        </p>
+            </div>
+    </div>
+
+    <script src="{{ asset('js/board_game_republic_values.js') }}"></script>
+{% endblock %}
